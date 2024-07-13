@@ -3,9 +3,9 @@ import streamlit as st
 from icecream import ic
 import pycountry
 
+EGD_URL: str = "https://www.europeangodatabase.eu/EGD/GetPlayerDataByData.php"
 # ToDo Change it to other url
 DB_URL: str = "http://localhost:8000"
-DB_SQL_URL: str = "http://localhost:8000/sql"
 HEADERS: dict = {
     "NS": "test",
     "DB": "test",
@@ -26,7 +26,7 @@ def people_from_egd(
     assert len(last_name) >= 2, "The last_name must have at least two letters."
 
     response = requests.get(
-        url="https://www.europeangodatabase.eu/EGD/GetPlayerDataByData.php",
+        url=EGD_URL,
         params={
             "lastname": last_name,
             "name": name,
@@ -39,8 +39,7 @@ def people_from_egd(
 
     if data.get("retcode") != "Ok":
         return []
-
-    assert type(data.get("players")) == list, "No players in data"
+    assert type(data.get("players")) == list, "EGD: No players field in data"
 
     people = [
         {
@@ -95,7 +94,7 @@ st.set_page_config(page_title="Twitch Overlay", page_icon="⚫")
 st.title("Twitch Overlay")
 
 
-# Session State
+# Variables and Session State
 
 people = []
 tournaments = []
