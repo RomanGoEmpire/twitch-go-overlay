@@ -7,60 +7,61 @@ from dotenv import load_dotenv
 from streamlit.elements.map import Data
 
 
-load_dotenv()
-URL = os.getenv("SURREAL_URL")
-HEADERS = {"Accept": "application/json", "DB": "main", "NS": "main"}
-AUTH = os.getenv("SURREAL_USER"), os.getenv("SURREAL_PASSWORD")
-
-
 class DB:
 
-    def select(self, table: str, id: str | int | None = None) -> list[dict]:
-        response = requests.get(url=url(table, id), headers=HEADERS, auth=AUTH)
+    def __init__(self) -> None:
+        load_dotenv()
+        self.URL = os.getenv("SURREAL_URL")
+        self.headers = {"Accept": "application/json", "DB": "main", "NS": "main"}
+        self.auth = os.getenv("SURREAL_USER"), os.getenv("SURREAL_PASSWORD")
+
+    def select(self, key: str) -> list[dict]:
+        response = requests.get(url=self.url(key), headers=self.headers, auth=self.auth)
         return extract(response)
 
-    def create(
-        self, table: str, id: str | int | None = None, data: dict = {}
-    ) -> list[dict]:
+    def create(self, key: str, data: dict = {}) -> list[dict]:
 
         response = requests.post(
-            url=url(table, id),
-            headers=HEADERS,
-            auth=AUTH,
+            url=self.url(key),
+            headers=self.headers,
+            auth=self.auth,
             json=data,
         )
         return extract(response)
 
-    def update(
-        self, table: str, id: str | int | None = None, data: dict = {}
-    ) -> list[dict]:
+    def update(self, key: str, data: dict = {}) -> list[dict]:
         response = requests.patch(
-            url=url(table, id),
-            headers=HEADERS,
-            auth=AUTH,
+            url=self.url(key),
+            headers=self.headers,
+            auth=self.auth,
             json=data,
         )
         return extract(response)
 
-    def delete(
-        self, table: str, id: str | int | None = None, data: dict = {}
-    ) -> list[dict]:
+    def delete(self, key: str, data: dict = {}) -> list[dict]:
         response = requests.delete(
-            url=url(table, id),
-            headers=HEADERS,
-            auth=AUTH,
+            url=self.url(key),
+            headers=self.headers,
+            auth=self.auth,
         )
         return extract(response)
 
     def sql(self, query: str) -> list[dict]:
         response = requests.post(
-            url=f"{URL}/sql", headers=HEADERS, auth=AUTH, data=query
+            url=f"{self.URL}/sql", headers=self.headers, auth=self.auth, data=query
         )
         return extract(response)
 
+    def url(self, key: str) -> str:
+        if ":" in key:
+            table, id = key.split(":")
+            return f"{self.URL}/key/{table}/{id}"
+        else:
+            return f"{self.URL}/key/{key}"
 
-def url(table: str, id: str | int | None) -> str:
-    return f"{URL}/key/{table}/{id}" if id else f"{URL}/key/{table}"
+    def active_tournament(self, key: str) -> None:
+        self.update("tournament", data={"active": False})
+        self.update(key, data={"active": True})
 
 
 def extract(response) -> list[dict]:
