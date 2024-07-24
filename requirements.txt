@@ -1,5 +1,9 @@
+python-dotenv
+icecream
+
 requests
 streamlit
 watchdog
+pycountry
+
 surrealdb
-python-dotenv

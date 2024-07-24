@@ -4,9 +4,16 @@ st.title("Twitch Go Overlay")
 
 pages = {
     "Plan": [
-        st.Page("sub_pages/tournaments.py", title="Tournament"),
-        st.Page("sub_pages/rounds.py", title="Rounds"),
-        st.Page("sub_pages/games.py", title="Games"),
+        st.Page("sub_pages/people.py", title="People", icon=":material/people:"),
+        st.Page(
+            "sub_pages/tournaments.py",
+            title="Tournament",
+            icon=":material/emoji_events:",
+        ),
+        st.Page(
+            "sub_pages/rounds.py", title="Rounds", icon=":material/calendar_today:"
+        ),
+        st.Page("sub_pages/games.py", title="Games", icon=":material/hdr_weak:"),
     ],
     "Live": [st.Page("sub_pages/live.py", title="On Air")],
 }

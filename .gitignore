@@ -164,4 +164,4 @@ cython_debug/
 .DS_Store
 
 pyrightconfig.json
-database.db
+players.json
