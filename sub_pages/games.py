@@ -11,11 +11,10 @@ if not round:
     st.warning("No rounds")
     st.stop()
 
+games = db.sql(f"SELECT * FROM game WHERE round={round["id"]}")
 players = db.sql(
     f"SELECT in.gor, in.* as player, in.name + ' ' + in.last_name + ' ' + in.rank as text from plays where out=={tournament["id"]} order by in.gor DESC"
 )
-
-games = db.sql(f"SELECT * FROM game WHERE round={round["id"]}")
 
 col1, col2 = st.columns(2)
 
@@ -27,7 +26,7 @@ games.sort(key=lambda g: g["game_number"])
 for game in games:
     container = st.empty()
     with container:
-        with st.expander(game["name"], expanded=True):
+        with st.expander(game["name"], expanded=False):
             name = st.text_input("Name", game["name"], key=f"{game["id"]}_name")
             col1, col2 = st.columns(2)
 

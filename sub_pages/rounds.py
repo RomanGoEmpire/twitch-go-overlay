@@ -30,12 +30,11 @@ if create_button:
 
 delete_button = col2.button("Delete Round", use_container_width=True)
 if delete_button:
-    db.delete(round["id"])
+    with st.spinner():
+        db.delete(round["id"])
+        db.sql(f"DELETE game where round=={round["id"]}")
     st.rerun()
 
-if not rounds:
-    st.info(f"No rounds for {tournament["name"]}")
-    st.stop()
 
 if not round:
     st.warning("No round selected")

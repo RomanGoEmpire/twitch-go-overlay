@@ -23,12 +23,17 @@ col1, col2 = st.columns(2)
 
 create_button = col1.button("New Tournament", type="primary", use_container_width=True)
 if create_button:
-    db.create("tournament")
+    st.session_state["tournaments"] += db.create("tournament")
     st.rerun()
 
 delete_button = col2.button("Delete Tournament", use_container_width=True)
 if delete_button:
-    db.delete(tournament["id"])
+    with st.spinner():
+        db.delete(tournament["id"])
+        rounds = db.sql(f"SELECT id from round where tournament=={tournament["id"]}")
+        db.sql(f"DELETE round where tournament=={tournament["id"]}")
+        for round in rounds:
+            db.sql(f"DELETE game where round=={round["id"]}")
     st.rerun()
 
 if not tournaments:

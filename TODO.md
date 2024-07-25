@@ -7,5 +7,9 @@
 - [x] add icon for on air
 - [x] round view
 - [x] games view
-- [ ] live view
+- [x] live view
 - [ ] update files on change
+
+- [ ] edit players
+- [ ] remove players and commentators from tournament
+- [ ]

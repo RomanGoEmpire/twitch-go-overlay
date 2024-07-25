@@ -18,17 +18,12 @@ with st.sidebar:
         key="active_tournament",
     )
 
-    if not active_tournament:
-        st.warning("No tournaments")
-        st.stop()
-
     rounds = db.sql(f"SELECT * FROM round WHERE tournament== {active_tournament["id"]}")
     st.session_state["rounds"] = rounds
 
     active_round = st.selectbox(
         "Round",
         options=rounds,
-        index=0,
         format_func=lambda t: t["name"],
         key="active_round",
     )
@@ -41,7 +36,7 @@ if "players" not in st.session_state:
 
 
 pages = {
-    "Plan": [
+    "Planning": [
         st.Page("sub_pages/people.py", title="People", icon=":material/people:"),
         st.Page(
             "sub_pages/tournaments.py",
