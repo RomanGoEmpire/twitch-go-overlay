@@ -4,7 +4,6 @@ import requests
 from requests import Response
 from icecream import ic
 from dotenv import load_dotenv
-from streamlit.elements.map import Data
 
 
 class DB:
