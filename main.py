@@ -1,11 +1,24 @@
+import os
+from dotenv import load_dotenv
 import streamlit as st
+from streamlit.runtime.state import session_state
 
 from src.db import DB
+
+if "login" not in st.session_state:
+    load_dotenv()
+    password = st.text_input("Password")
+    if password == os.getenv("STREAMLIT_PASSWORD"):
+        st.session_state["login"] = True
+        st.rerun()
+    st.stop()
+
 
 st.title("Twitch Go Overlay")
 
 db = DB()
 st.session_state["db"] = db
+
 
 with st.sidebar:
     tournaments = db.select("tournament")
