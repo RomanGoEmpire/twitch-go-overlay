@@ -9,12 +9,29 @@ st.session_state["db"] = db
 
 with st.sidebar:
     tournaments = db.select("tournament")
+    st.session_state["tournaments"] = tournaments
 
     active_tournament = st.selectbox(
         "Tournament",
         options=tournaments,
         format_func=lambda t: t["name"],
         key="active_tournament",
+    )
+
+    rounds = db.sql(f"SELECT * FROM round WHERE tournament== {active_tournament["id"]}")
+    st.session_state["rounds"] = rounds
+
+    active_round = st.selectbox(
+        "Round",
+        options=rounds,
+        format_func=lambda t: t["name"],
+        key="active_round",
+    )
+
+
+if "players" not in st.session_state:
+    st.session_state["players"] = db.sql(
+        f"SELECT id, name +' ' + last_name + ' ' + rank  as text, gor from person  order by gor DESC"
     )
 
 
@@ -31,7 +48,7 @@ pages = {
         ),
         st.Page("sub_pages/games.py", title="Games", icon=":material/hdr_weak:"),
     ],
-    "Live": [st.Page("sub_pages/live.py", title="On Air")],
+    "Live": [st.Page("sub_pages/live.py", title="On Air", icon=":material/live_tv:")],
 }
 
 
