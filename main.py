@@ -7,7 +7,7 @@ from src.db import DB
 
 if "login" not in st.session_state:
     load_dotenv()
-    password = st.text_input("Password")
+    password = st.text_input("Password", type="password")
     if password == os.getenv("STREAMLIT_PASSWORD"):
         st.session_state["login"] = True
         st.rerun()
