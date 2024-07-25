@@ -57,6 +57,6 @@ active_game = st.selectbox(
 )
 
 if not active_game["active"]:
-    db.sql(f"UPDATE game set active=False WHERE round=={active_round["id"]}")
+    db.sql(f"UPDATE game set active=False")
     db.update(active_game["id"], data={"active": True})
     st.rerun()
