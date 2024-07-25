@@ -48,7 +48,6 @@ games = db.sql(
     FROM game
     WHERE round={active_round["id"]} order by game_number"""
 )
-
 active_game = st.selectbox(
     "Active Game",
     games,
@@ -56,7 +55,15 @@ active_game = st.selectbox(
     format_func=lambda g: f"{g["name"]} - {g["black_player"]} vs {g["white_player"]}",
 )
 
-if not active_game["active"]:
+
+miss_match = any(
+    game
+    for game in games
+    if game["id"] == active_game["id"] and game["active"] != active_game["active"]
+)
+
+
+if not active_game["active"] and not miss_match:
     db.sql(f"UPDATE game set active=False")
     db.update(active_game["id"], data={"active": True})
     st.rerun()

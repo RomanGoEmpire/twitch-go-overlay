@@ -67,8 +67,7 @@ async def main() -> None:
                 update = await websocket.recv()
                 update = json.loads(update)
                 update = update["result"]
-                ic(tournament_id, round_id, game_id)
-                ic(update)
+
                 if update["id"] == tournament_id:
                     update_tournament_files(update["result"])
                 elif update["id"] == round_id:
